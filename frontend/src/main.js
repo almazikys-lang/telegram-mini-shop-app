@@ -1,27 +1,67 @@
+// Initialize Telegram WebApp
 const tg = window.Telegram.WebApp;
+
+// Initialize the app
 tg.ready();
-let cart = [];
-const products = [
-  {id:1,name:'Book',emoji:'📚',price:10},
-  {id:2,name:'Coffee',emoji:'☕',price:5},
-  {id:3,name:'Phone',emoji:'📱',price:299},
-  {id:4,name:'Laptop',emoji:'💻',price:1299},
-  {id:5,name:'Watch',emoji:'⌚',price:199},
-  {id:6,name:'Headphones',emoji:'🎧',price:79}
-];
-function renderProducts(){
-  const el=document.getElementById('products');
-  el.innerHTML=products.map(p=>`<div class="product"><div class="product-emoji">${p.emoji}</div><div class="product-name">${p.name}</div><div class="product-price">$${p.price}</div><button class="add-btn" onclick="addToCart(${p.id})">Add</button></div>`).join('');
+
+// Set theme to match app
+const htmlElement = document.documentElement;
+if (tg.colorScheme === 'dark') {
+  htmlElement.setAttribute('data-color-scheme', 'dark');
 }
-function addToCart(id){
-  const p=products.find(x=>x.id===id);
-  cart.push(p);
-  updateCart();
-  tg.HapticFeedback?.impactOccurred('light');
+
+// Update theme when changed
+tg.onEvent('themeChanged', () => {
+  if (tg.colorScheme === 'dark') {
+    htmlElement.setAttribute('data-color-scheme', 'dark');
+  } else {
+    htmlElement.removeAttribute('data-color-scheme');
+  }
+});
+
+// Setup main button
+tg.MainButton.text = 'Send Data';
+tg.MainButton.show();
+
+// Handle main button click
+tg.MainButton.onClick(() => {
+  const data = {
+    message: 'Mini app is working!',
+    timestamp: new Date().toISOString(),
+  };
+  
+  // Send data back to bot
+  tg.sendData(JSON.stringify(data));
+});
+
+// Handle back button
+tg.onEvent('backButtonClicked', () => {
+  tg.close();
+});
+
+// Show back button
+tg.BackButton.show();
+
+// Log app info
+console.log('Telegram WebApp initialized:', {
+  initData: tg.initData,
+  user: tg.initDataUnsafe.user,
+  colorScheme: tg.colorScheme,
+  platform: tg.platform,
+});
+
+// Trigger haptic feedback
+tg.HapticFeedback.impactOccurred('light');
+
+// Render initial UI
+const app = document.getElementById('app');
+if (app) {
+  app.innerHTML = `
+    <div class="container">
+      <h1>Telegram Mini App</h1>
+      <p>User: <strong>${tg.initDataUnsafe.user?.first_name || 'Guest'}</strong></p>
+      <p>Platform: <strong>${tg.platform}</strong></p>
+      <p>Click the button below to send data to the bot.</p>
+    </div>
+  `;
 }
-function updateCart(){
-  document.getElementById('cartBadge').textContent=cart.length;
-  const total=cart.reduce((s,p)=>s+p.price,0);
-  document.getElementById('total').textContent=total;
-}
-renderProducts();
