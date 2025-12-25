@@ -1,14 +1,18 @@
 {
   "name": "telegram-mini-shop-app",
   "version": "1.0.0",
-  "description": "Complete Telegram Mini App - Shop",
+  "description": "Complete Telegram Mini App - Shop catalog with product listings, cart, and checkout system",
   "type": "module",
   "scripts": {
-    "dev": "cd frontend && npm run dev",
+    "dev": "npm run dev --prefix backend",
     "build": "cd frontend && npm run build",
-    "start:bot": "cd bot && node index.js"
+    "start:bot": "npm start --prefix backend",
+    "start:dev": "concurrently \"npm run dev\" \"npm run dev --prefix frontend\""
   },
   "keywords": ["telegram", "mini-app", "shop"],
   "author": "almazikys",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
