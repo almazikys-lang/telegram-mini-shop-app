@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Shop App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="app" class="app">
+        <header class="header">
+            <h1>Shop 🛍️</h1>
+            <div class="cart-badge" id="cartBadge">0</div>
+        </header>
+        <main class="main-content">
+            <section class="products" id="products"></section>
+        </main>
+        <footer class="footer">
+            <div class="total">Total: $<span id="total">0</span></div>
+        </footer>
+    </div>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
